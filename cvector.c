@@ -1,8 +1,10 @@
 #include "cvector.h"
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 int cvector_int_init(struct cvector_int_t *vec) {
+    assert(vec);
     vec->size = 0;
     vec->capacity = 8;
     /* TODO: replace with allocator */    
@@ -11,6 +13,7 @@ int cvector_int_init(struct cvector_int_t *vec) {
 }
 
 int cvector_int_init_ex(struct cvector_int_t *vec, size_t init_capacity) {
+    assert(vec);
     vec->size = 0;
     vec->capacity = init_capacity;
     /* TODO: replace with allocator */    
@@ -19,10 +22,11 @@ int cvector_int_init_ex(struct cvector_int_t *vec, size_t init_capacity) {
 }
 
 int cvector_int_push(struct cvector_int_t *vec, CVECTOR_TYPE elem) {
+    assert(vec);
     if (vec->size > vec->capacity) {
         /* TODO: replace with allocator */
         /* TODO: multiple by 1.5 instead of doubling? */
-        CVECTOR_TYPE *newbuf  = realloc(vec->buf, vec->capacity * 2);
+        CVECTOR_TYPE *newbuf  = realloc(vec->buf, vec->capacity * 2 * sizeof(*vec->buf));
         if (!newbuf) return 1;
         vec->capacity *= 2;
         vec->buf = newbuf;
@@ -31,19 +35,37 @@ int cvector_int_push(struct cvector_int_t *vec, CVECTOR_TYPE elem) {
     return 0;
 }
 
-size_t cvector_int_size(struct cvector_int_t *vec) {
+void cvector_int_pop_back(struct cvector_int_t *vec) {
+    assert(vec);
+    assert(vec->size);
+    --vec->size;
+}
+
+int cvector_int_pop_back_ex(struct cvector_int_t *vec, cvector_int_finalizer_t finalizer) {
+    assert(vec);
+    assert(vec->size);
+    assert(finalizer);
+    return finalizer(&vec->buf[--vec->size]);
+}
+
+size_t cvector_int_size(const struct cvector_int_t *vec) {
+    assert(vec);
     return vec->size;
 }
 
-size_t cvector_int_capacity(struct cvector_int_t *vec) {
+size_t cvector_int_capacity(const struct cvector_int_t *vec) {
+    assert(vec);
     return vec->capacity;
 }
 
 CVECTOR_TYPE *cvector_int_front(struct cvector_int_t *vec) {
+    assert(vec);
+    assert(vec->size);
     return &vec->buf[0];
 }
 
 int cvector_int_destroy(struct cvector_int_t *vec) {
+    assert(vec);
     /* TODO: replace with destructor */
     if (vec->capacity) {
         free(vec->buf);

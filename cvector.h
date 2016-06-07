@@ -14,6 +14,9 @@ struct cvector_int_t {
     size_t capacity;
 };
 
+typedef int (*cvector_int_finalizer_t)(CVECTOR_TYPE *elem);
+// 
+
 int cvector_int_init(struct cvector_int_t *vec);
 // initialize `vec` which must not be null.
 // allocates starting buffer of size 8.
@@ -27,11 +30,20 @@ int cvector_int_push(struct cvector_int_t *vec, CVECTOR_TYPE elem);
 // push `elem` onto `vec`.  may allocate a new buffer, move elements,
 // and deallocate buffer.
 
-size_t cvector_int_size(struct cvector_int_t *vec);
+/* TODO: allow pass destructor? */
+void cvector_int_pop_back(struct cvector_int_t *vec);
+// remove the last element in `vec`, which must not be empty
+
+int cvector_int_pop_back_ex(struct cvector_int_t *vec, cvector_int_finalizer_t finalizer);
+// remove the last element in `vec` and pass it to `finalizer` to destroy.
+// `finalizer` must not be null.
+// returns result from `finalizer`
+
+size_t cvector_int_size(const struct cvector_int_t *vec);
 // return the current number of elements in `vec`.
 // `vec` must not be null
 
-size_t cvector_int_capacity(struct cvector_int_t *vec);
+size_t cvector_int_capacity(const struct cvector_int_t *vec);
 // return the capacity (number of elements allocated in buffer) of `vec`.
 // `vec` must not be null
 
