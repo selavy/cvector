@@ -3,12 +3,6 @@
 #include <string.h>
 #include <assert.h>
 
-struct cvector_int_t {
-    CVECTOR_TYPE *buf;
-    size_t size;
-    size_t capacity;
-};
-
 int cvector_int_init(struct cvector_int_t *vec) {
     assert(vec);
     vec->size = 0;

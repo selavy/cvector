@@ -6,8 +6,12 @@
 /* TODO: define this type before including file */
 #define CVECTOR_TYPE int
 
-struct cvector_int_t;
-// dynamically sized array that guarantees contiguous memory
+struct cvector_int_t {
+    // dynamically sized array that guarantees contiguous memory
+    CVECTOR_TYPE *buf;
+    size_t size;
+    size_t capacity;
+};
 
 typedef int (*cvector_int_finalizer_t)(CVECTOR_TYPE *elem);
 // function pointer to cleanup elements if needed
