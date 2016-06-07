@@ -9,4 +9,4 @@ $(TARGET): $(OBJS)
 	$(CC) -o $@ $(CFLAGS) -c $<
 .PHONY: clean
 clean:
-	rm -rf $(TARGET) $(OBJS)
+	rm -rf $(TARGET) $(OBJS) *~
