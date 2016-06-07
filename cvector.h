@@ -6,16 +6,11 @@
 /* TODO: define this type before including file */
 #define CVECTOR_TYPE int
 
-struct cvector_int_t {
-    // dynamically sized array that guarantees contiguous memory
-    
-    CVECTOR_TYPE *buf;
-    size_t size;
-    size_t capacity;
-};
+struct cvector_int_t;
+// dynamically sized array that guarantees contiguous memory
 
 typedef int (*cvector_int_finalizer_t)(CVECTOR_TYPE *elem);
-// 
+// function pointer to cleanup elements if needed
 
 int cvector_int_init(struct cvector_int_t *vec);
 // initialize `vec` which must not be null.
@@ -54,5 +49,9 @@ CVECTOR_TYPE *cvector_int_front(struct cvector_int_t *vec);
 int cvector_int_destroy(struct cvector_int_t *vec);
 // deallocate memory allocated in `vec`.
 // returns 0 if successful.
+
+int cvector_int_destroy_ex(struct cvector_int_t *vec, cvector_int_finalizer_t finalizer);
+// deallocate buffer in `vec`.  call `finalizer` on each element.
+// neither `vec` or `finalizer` can be null.
 
 #endif // CVECTOR__H_

@@ -3,6 +3,12 @@
 #include <string.h>
 #include <assert.h>
 
+struct cvector_int_t {
+    CVECTOR_TYPE *buf;
+    size_t size;
+    size_t capacity;
+};
+
 int cvector_int_init(struct cvector_int_t *vec) {
     assert(vec);
     vec->size = 0;
@@ -71,4 +77,20 @@ int cvector_int_destroy(struct cvector_int_t *vec) {
         free(vec->buf);
     }
     return 0;
+}
+
+int cvector_int_destroy_ex(struct cvector_int_t *vec, cvector_int_finalizer_t finalizer) {
+    assert(vec);
+    int ret = 0;
+    if (vec->capacity) {
+        for (size_t i = 0; i < vec->size; ++i) {
+            if (finalizer(&vec->buf[i]) != 0) {
+                ret = 1;
+                break;
+            }
+        }
+        /* still need to deallocate buffer even if finalizer fails? */
+        free(vec->buf);
+    }
+    return ret;
 }
