@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "cvector_int.h"
+#include "cvector_char.h"
+#include "cvector_long.h"
 
 struct node {
     struct node *next;
@@ -76,6 +78,30 @@ void print_cvector(struct cvector_int_t *vec) {
     printf("\n");
 }
 
+void print_char_vector(struct cvector_char_t *vec) {
+    assert(vec);
+    const size_t size = cvector_char_size(vec);
+    if (size) {
+        const char *itr = cvector_char_front(vec);
+        for (size_t i = 0; i < size; ++i, ++itr) {
+            printf("%c ", *itr);
+        }
+    }
+    printf("\n");
+}
+
+void print_long_vector(struct cvector_long_t *vec) {
+    assert(vec);
+    const size_t size = cvector_long_size(vec);
+    if (size) {
+        const long *itr = cvector_long_front(vec);
+        for (size_t i = 0; i < size; ++i, ++itr) {
+            printf("%ld ", *itr);
+        }
+    }
+    printf("\n");
+}
+
 int main(int argc, char **argv) {
     struct cvector_int_t vec;
     struct llist list;
@@ -121,5 +147,46 @@ int main(int argc, char **argv) {
         perror("llist_destroy");
         exit(1);
     }
+
+    // CHAR VECTOR
+    {
+        struct cvector_char_t cvec;
+        if (cvector_char_init(&cvec) != 0) {
+            perror("cvector_char_init");
+            exit(1);
+        }
+        for (char c = 'A'; c <= 'Z'; ++c) {
+            if (cvector_char_push(&cvec, c) != 0) {
+                perror("cvector_char_push");
+                break;
+            }
+        }
+        printf("Printing char vector...");
+        print_char_vector(&cvec);
+        if (cvector_char_destroy(&cvec) != 0) {
+            perror("cvector_char_destroy");
+        }
+    }
+
+    // LONG VECTOR
+    {
+        struct cvector_long_t cvec;
+        if (cvector_long_init(&cvec) != 0) {
+            perror("cvector_long_init");
+            exit(1);
+        }
+        for (long c = 0; c <= 25; ++c) {
+            if (cvector_long_push(&cvec, c) != 0) {
+                perror("cvector_long_push");
+                break;
+            }
+        }
+        printf("Printing long vector...");
+        print_long_vector(&cvec);
+        if (cvector_long_destroy(&cvec) != 0) {
+            perror("cvector_long_destroy");
+        }
+    }
+    
     return 0;
 }
