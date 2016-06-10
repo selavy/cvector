@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "cvector.h"
+#include "cvector_int.h"
 
 struct node {
     struct node *next;

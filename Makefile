@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-g -pedantic -Wall -Werror
-OBJS=main.o cvector.o
+OBJS=main.o cvector_int.o
 TARGET=driver
 
 $(TARGET): $(OBJS)
