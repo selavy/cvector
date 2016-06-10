@@ -5,7 +5,11 @@
 
 /* TODO: define this type before including file */
 #define CVECTOR_TYPE int
+//#define CVECTOR cvector_##CVECTOR_TYPE##_t
+#define CVECTOR cvector_int_t
+#define FINALIZER cvector_int_finalizer_t
 
+//struct cvector_int_t {
 struct cvector_int_t {
     // dynamically sized array that guarantees contiguous memory
     CVECTOR_TYPE *buf;
@@ -13,7 +17,7 @@ struct cvector_int_t {
     size_t capacity;
 };
 
-typedef int (*cvector_int_finalizer_t)(CVECTOR_TYPE *elem);
+typedef int (*FINALIZER)(CVECTOR_TYPE *elem);
 // function pointer to cleanup elements if needed
 
 int cvector_int_init(struct cvector_int_t *vec);
@@ -33,7 +37,7 @@ int cvector_int_push(struct cvector_int_t *vec, CVECTOR_TYPE elem);
 void cvector_int_pop_back(struct cvector_int_t *vec);
 // remove the last element in `vec`, which must not be empty
 
-int cvector_int_pop_back_ex(struct cvector_int_t *vec, cvector_int_finalizer_t finalizer);
+int cvector_int_pop_back_ex(struct cvector_int_t *vec, FINALIZER finalizer);
 // remove the last element in `vec` and pass it to `finalizer` to destroy.
 // `finalizer` must not be null.
 // returns result from `finalizer`
@@ -54,7 +58,7 @@ int cvector_int_destroy(struct cvector_int_t *vec);
 // deallocate memory allocated in `vec`.
 // returns 0 if successful.
 
-int cvector_int_destroy_ex(struct cvector_int_t *vec, cvector_int_finalizer_t finalizer);
+int cvector_int_destroy_ex(struct cvector_int_t *vec, FINALIZER finalizer);
 // deallocate buffer in `vec`.  call `finalizer` on each element.
 // neither `vec` or `finalizer` can be null.
 
