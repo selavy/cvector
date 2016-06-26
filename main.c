@@ -5,6 +5,16 @@
 #include "cvector_char.h"
 #include "cvector_long.h"
 
+struct data_t {
+    int a;
+    int b;
+    int c;
+    int d;
+};
+void print_data(struct data_t *d) {
+    printf("(%d %d %d %d)", d->a, d->b, d->c, d->d);
+}
+
 struct node {
     struct node *next;
     int data;
@@ -95,6 +105,18 @@ void print_long_vector(struct cvector_long_t *vec) {
     const size_t size = cvector_long_size(vec);
     if (size) {
         const long *itr = cvector_long_front(vec);
+        for (size_t i = 0; i < size; ++i, ++itr) {
+            printf("%ld ", *itr);
+        }
+    }
+    printf("\n");
+}
+
+void print_data_vector(struct cvector_data_t *vec) {
+    assert(vec);
+    const size_t size = cvector_long_size(vec);
+    if (size) {
+        const struct data_t *itr = cvector_long_front(vec);
         for (size_t i = 0; i < size; ++i, ++itr) {
             printf("%ld ", *itr);
         }
